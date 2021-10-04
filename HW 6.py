@@ -123,6 +123,13 @@ print("Standard deviation of the out of sample accuracy scores = ", testacc3.std
 print("The training accuracy is = ",trainacc3.mean(),"+/-",trainacc3.std())
 print("The test accuracy is = ",testacc3.mean(),"+/-",testacc3.std())
 
+#%%
+print("My name is Vedant Mundada")
+print("My NetID is:vkm3")
+print("I hereby certify that I have read the University policy on Academic Integrity and that I am not in violation.")
+
+
+
 
 
 
