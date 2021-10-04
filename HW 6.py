@@ -40,7 +40,8 @@ plt.show()
 
 testacc = np.array(testacc)
 trainacc = np.array(trainacc)
-
+print("The training accuracy is = ",trainacc)
+print("The test accuracy is = ",testacc)
 print("Mean of the in sample accuracy scores = ", trainacc.mean())
 print("Mean of the out of sample accuracy scores = ", testacc.mean())
 print("Standard deviation of the in sample accuracy scores = ", trainacc.std())
@@ -59,24 +60,25 @@ X_train2, X_test2, y_train2, y_test2 = train_test_split(X, y,test_size=0.10, ran
 scaler = preprocessing.StandardScaler().fit(X_train2)
 X_train2 = scaler.transform(X_train)
 X_test2 = scaler.transform(X_test)
-kfold = StratifiedKFold(n_splits = 10, random_state=10).split(X_train2,y_train2)
+kfold = StratifiedKFold(n_splits = 10).split(X_train2,y_train2)
 dtc = DecisionTreeClassifier(max_depth=3)
 
 for k, (train,test) in enumerate(kfold):
     dtc.fit(X_train[train], y_train[train])
     trainacc2.append(dtc.score(X_train[test], y_train[test]))
     testacc2.append(dtc.score(X_test,y_test))
-    print('Fold :',k+1 ,' Class dist :', np.bincount(y_train[train]),' Training set Accuracy:',dtc.score(X_train[test], y_train[test]) , 'Test set accuracy :',dtc.score(X_test,y_test))
+    print('Fold :',k+1 ,' Class dist :', np.bincount(y_train[train]),' Training set Accuracy:',dtc.score(X_train[train], y_train[train]) , 'Test set accuracy :',dtc.score(X_train[test], y_train[test]))
     
 #%%
 from sklearn.model_selection import cross_val_score
-dtc = DecisionTreeClassifier(max_depth=3)
-scores = cross_val_score(estimator = dtc , X = X_train, y=y_train, cv=10 , n_jobs = 1)
-dtc.fit(X_train,y_train)
-y_pred3=dtc.predict(X_test)
+dtc2 = DecisionTreeClassifier(max_depth=3)
+kfold = StratifiedKFold(n_splits = 10).split(X_train2,y_train2)
+scores = cross_val_score(estimator = dtc , X = X_train, y=y_train, cv=kfold , n_jobs = 1)
+dtc2.fit(X_train,y_train)
+y_pred3=dtc2.predict(X_test)
 print("CV accuracy Scores ",scores)
-print("CV acuracy is ", np.mean(trainacc2),"+/-", np.std(trainacc2))
-print("Test accuracy ",dtc.score(X_test,y_test))
+print("CV acuracy is ", np.mean(scores),"+/-", np.std(scores))
+print("Test accuracy ",dtc2.score(X_test,y_test))
 
 
 
